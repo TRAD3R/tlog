@@ -1,4 +1,4 @@
-module tlog
+module github.com/TRAD3R/tlog
 
 go 1.22
 
