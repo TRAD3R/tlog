@@ -14,7 +14,7 @@ type Tlog struct {
 	*slog.Logger
 }
 
-func GetLogger(level slog.Level) *Tlog {
+func GetLogger(isDebug bool) *Tlog {
 	projDir, err := os.Getwd()
 	if err != nil {
 		panic(err)
@@ -29,6 +29,10 @@ func GetLogger(level slog.Level) *Tlog {
 		panic(fmt.Errorf("Failed to open file '%s' %w", logFilename, err))
 	}
 
+	level := slog.LevelInfo
+	if isDebug {
+		level = slog.LevelDebug
+	}
 	opts := &slog.HandlerOptions{
 		AddSource:   true,
 		Level:       level,
