@@ -33,10 +33,20 @@ func GetLogger(isDebug bool) *Logger {
 	if isDebug {
 		level = slog.LevelDebug
 	}
+
+	replace := func(groups []string, a slog.Attr) slog.Attr {
+		// Remove the directory from the source's filename.
+		if a.Key == slog.SourceKey {
+			source := a.Value.Any().(*slog.Source)
+			source.File = filepath.Base(source.File)
+		}
+		return a
+	}
+
 	opts := &slog.HandlerOptions{
 		AddSource:   true,
 		Level:       level,
-		ReplaceAttr: nil,
+		ReplaceAttr: replace,
 	}
 	fileHandler := slog.NewJSONHandler(logFile, opts)
 
