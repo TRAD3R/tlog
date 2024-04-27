@@ -1,6 +1,7 @@
 package tlog
 
 import (
+	"errors"
 	"fmt"
 	"log/slog"
 	"os"
@@ -21,6 +22,12 @@ func GetLogger(isDebug bool) *Logger {
 	}
 
 	logDir := filepath.Join(projDir, "logs")
+
+	if _, err := os.Stat(logDir); errors.Is(err, os.ErrNotExist) {
+		if err := os.MkdirAll(logDir, os.ModePerm); err != nil {
+			panic(err)
+		}
+	}
 
 	logFilename := filepath.Join(logDir, time.Now().Format("2006-01-02")+".log")
 
