@@ -11,11 +11,7 @@ import (
 	slogmulti "github.com/samber/slog-multi"
 )
 
-type Logger struct {
-	*slog.Logger
-}
-
-func GetLogger(isDebug bool) *Logger {
+func GetLogger(isDebug bool) *slog.Logger {
 	projDir, err := os.Getwd()
 	if err != nil {
 		panic(err)
@@ -61,5 +57,5 @@ func GetLogger(isDebug bool) *Logger {
 	logger := slog.New(slogmulti.Fanout(fileHandler, outHandler))
 	slog.SetDefault(logger)
 
-	return &Logger{logger}
+	return logger
 }
